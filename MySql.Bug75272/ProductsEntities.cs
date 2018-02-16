@@ -28,15 +28,28 @@ namespace MySql.Bug75272
 
     public class product
     {
-        public int id { get; set; }
+        // Change type int to long generate Bug "FROM (SELECT"
+        public long id { get; set; }
         public string name { get; set; }
         [Required]
         public virtual category category { get; set; }
     }
 
+    // For especific column select
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public class productProxy : product {
+
+    }
+
     public class category
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string name { get; set; }
+    }
+
+    // For especific column select
+    [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+    public class categoryProxy : category {
+
     }
 }

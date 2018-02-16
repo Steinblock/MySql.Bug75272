@@ -28,14 +28,35 @@ namespace MySql.Bug75272
 
                 context.Database.Log = q => Console.WriteLine(q);
 
+                // Bug product id long
                 var products1 = context.products
                     .OrderBy(x => x.id)
                     .Take(10)
                     .ToList();
-                
+
+                // Bug product id long
                 var products2 = context.products
+                    .Select(x => new productProxy {
+                        id = x.id,
+                        name = x.name,
+                    })
+                    .Where(x => x.id > 0)
+                    .OrderByDescending(x => x.id)
+                    .Take(10)
+                    .ToList();
+
+                // Bug cateroy id long
+                var products3 = context.products
                     .Include(x => x.category)
-                    .OrderBy(x => x.id)
+                    .Select(x => new productProxy {
+                        id = x.id,
+                        name = x.name,
+                        category = new categoryProxy {
+                            name = x.category.name
+                        }
+                    })
+                    .Where(x => x.id > 0)
+                    .OrderByDescending(x => x.id)
                     .Take(10)
                     .ToList();
 
