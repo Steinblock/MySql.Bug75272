@@ -28,13 +28,20 @@ namespace MySql.Bug75272
 
                 context.Database.Log = q => Console.WriteLine(q);
 
-                var products1 = context.products
-                    .OrderBy(x => x.id)
-                    .Take(10)
-                    .ToList();
+                //var products1 = context.products
+                //    .OrderBy(x => x.id)
+                //    .Take(10)
+                //    .ToList();
                 
                 var products2 = context.products
                     .Include(x => x.category)
+                    .Select(x => new productProxy {
+                        id = x.id,
+                        name = x.name,
+                        category = new categoryProxy {
+                            name = x.name
+                        }
+                    })
                     .OrderBy(x => x.id)
                     .Take(10)
                     .ToList();
