@@ -43,7 +43,7 @@ namespace MySql.Bug75272
 
     public class category
     {
-        public int id { get; set; }
+        public long id { get; set; }
         public string name { get; set; }
     }
 
